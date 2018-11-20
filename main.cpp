@@ -1,85 +1,159 @@
-#include <iostream>
-#include<GL/gl.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glut.h>
-using namespace std;
-
-float _move = 0.0f;
-
-
-float getX(int x)
+#include<stdio.h>
+float camPosY = 0.0f;
+float camPosX = 0.0f;
+float camPosZ = 5.0f;
+void init(void)
 {
-    int width= glutGet(GLUT_WINDOW_WIDTH);
-    return (float)x/width/2;
+   glClearColor (0.0, 0.0, 0.0, 0.0);
+   glShadeModel (GL_FLAT);
 }
-
-float getY(int y)
+void update(int i)
 {
-    int height=glutGet(GLUT_WINDOW_HEIGHT);
-    return (float)y/height/2;
+    //gluLookAt(0,camPosy,0,0.0,0.0,0.0,0.0,0.0,0.0);
+    glutPostRedisplay();
+}
+void specialKeys(int key, int x, int y) {
+    switch (key) {
+      case GLUT_KEY_UP:
+          camPosY+=0.5f;
+          printf("a");
+          update(0);
+          break;
+      case GLUT_KEY_DOWN:
+          camPosY-=0.5f;
+          update(0);
+          break;
+    case GLUT_KEY_RIGHT:
+          camPosX+=0.5f;
+          printf("a");
+          update(0);
+          break;
+    case GLUT_KEY_LEFT:
+          camPosX-=0.5f;
+          update(0);
+          break;
+    case GLUT_KEY_PAGE_UP:
+          camPosZ+=0.5f;
+          update(0);
+          break;
+    case GLUT_KEY_PAGE_DOWN:
+          camPosZ-=0.5f;
+          update(0);
+          break;
+
+
+}
 }
 
-void drawScene() {
+void display(void)
+{
+   glClear (GL_COLOR_BUFFER_BIT);
+   glColor3f (1.0, 1.0, 1.0);
+   glLoadIdentity ();             /* clear the matrix */
+           /* viewing transformation  */
 
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3d(1,1,0);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
 
-    glPushMatrix();
-	glScalef(3.0, 3.0, 0);
-	glTranslatef(_move, 0.0f, 0.0f);
+   gluLookAt (camPosX, camPosY, camPosZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+   //glScalef (1.0, 2.0, 1.0);      /* modeling transformation */
+   //glutWireCube (2.0);
+
+
+
+
+
+
+    //glVertex3f(0,-1,0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     glBegin(GL_QUADS);
-        glVertex3f(getX(-300),getY(100), 0.0f);
-        glVertex3f(getX(-350),getY(50), 0.0f);
-        glVertex3f(getX(-550),getY(50), 0.0f);
-        glVertex3f(getX(-600),getY(100), 0.0f);
+        //X-Axis BLUE
+        glColor3ub(0,120,255);
+        glVertex3f(0,1,0);
+        glVertex3f(0,0,0);
+        glVertex3f(0,0,1);
+        glVertex3f(0,1,1);
     glEnd();
 
     glBegin(GL_QUADS);
-        glVertex3f(getX(-400),getY(100), 0.0f);
-        glVertex3f(getX(-420),getY(100), 0.0f);
-        glVertex3f(getX(-420),getY(200), 0.0f);
-        glVertex3f(getX(-400),getY(200), 0.0f);
-    glEnd();
+        //X-Axis PINK
+        glColor3ub(255,0,255);
+        glVertex3f(1,1,1);
+        glVertex3f(1,0,1);
+        glVertex3f(1,0,0);
+        glVertex3f(1,1,0);
 
+    glEnd();
     glBegin(GL_QUADS);
-        glVertex3f(getX(-440),getY(100), 0.0f);
-        glVertex3f(getX(-460),getY(100), 0.0f);
-        glVertex3f(getX(-460),getY(200), 0.0f);
-        glVertex3f(getX(-440),getY(200), 0.0f);
+        //X-Axis GREEN
+        glColor3ub(0,255,0);
+        glVertex3f(0,0,0);
+        glVertex3f(1,0,0);
+        glVertex3f(1,0,1);
+        glVertex3f(0,0,1);
     glEnd();
-
     glBegin(GL_QUADS);
-        glVertex3f(getX(-480),getY(100), 0.0f);
-        glVertex3f(getX(-500),getY(100), 0.0f);
-        glVertex3f(getX(-500),getY(200), 0.0f);
-        glVertex3f(getX(-480),getY(200), 0.0f);
-    glEnd();
-    glPopMatrix();
+        //X-Axis YELLOW
+        glColor3ub(255,255,0);
+        glVertex3f(0,1,1);
+        glVertex3f(0,1,0);
+        glVertex3f(1,1,0);
+        glVertex3f(1,1,1);
 
-	glutSwapBuffers();
+    glEnd();
+
+     glBegin(GL_QUADS);
+        //X-Axis PURPLE
+        glColor3ub(120,130,255);
+        glVertex3f(1,1,1);
+        glVertex3f(1,0,1);
+        glVertex3f(0,0,1);
+        glVertex3f(0,1,1);
+
+    glEnd();
+   glFlush ();
 }
 
-void update(int value) {
-
-    _move += .02;
-    if(_move +0.3 > 1.0)
-    {
-        _move = -0.8;
-    }
-	glutPostRedisplay();
-
-	glutTimerFunc(20, update, 0);
+void reshape (int w, int h)
+{
+   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity ();
+   glFrustum (-1.0, 1.0, -1.0, 1.0, 2.0, 20.0);
+   glMatrixMode (GL_MODELVIEW);
 }
 
-int main(int argc, char** argv) {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(800, 800);
-	glutCreateWindow("Transformation");
-	glutDisplayFunc(drawScene);
-	glutTimerFunc(20, update, 0);
-	glutMainLoop();
-	return 0;
+int main(int argc, char** argv)
+{
+   glutInit(&argc, argv);
+   glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
+   glutInitWindowSize (500, 500);
+   glutInitWindowPosition (100, 100);
+   glutCreateWindow (argv[0]);
+   init ();
+   glutDisplayFunc(display);
+   glutReshapeFunc(reshape);
+   glutSpecialFunc(specialKeys);
+   glutMainLoop();
+   return 0;
 }
